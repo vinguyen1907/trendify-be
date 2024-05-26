@@ -1,0 +1,29 @@
+server:
+  port: 8888
+
+spring:
+  application:
+    name: api-gateway
+  main:
+    web-application-type: REACTIVE
+  datasource:
+    url: none
+  cloud:
+    gateway:
+      default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials
+      routes:
+        - id: user-service
+          uri: http://localhost:8080
+          predicates:
+            - Path=/api/v1/users/**,/api/v1/history/**
+        - id: product-service
+          uri: http://localhost:8081
+          predicates:
+            - Path=/api/v1/products/**
+
+logging:
+  level:
+    org.springframework.web: DEBUG
+    reactor.netty.http.client.HttpClient: DEBUG
+    io.netty.handler.ssl: DEBUG
