@@ -1,4 +1,4 @@
-# Microservices Order Management System
+# Trendify MS - E-Commerce Management System
 
 This project is a microservices-based e-commerce management system. The system includes several services to handle different aspects of an e-commerce management, such as user management, product management, and order processing. It uses technologies like Kafka for messaging, Spring Cloud Gateway for API Gateway, and RESTful services for communication between microservices.
 
