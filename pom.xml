@@ -22,6 +22,8 @@
         <module>cart-service</module>
         <module>common-lib</module>
         <module>api-gateway</module>
+        <module>payment-service</module>
+        <module>order-service</module>
     </modules>
 
     <properties>
@@ -38,25 +40,22 @@
         <netty.version>4.1.109.Final</netty.version>
         <logstash.logback.version>7.4</logstash.logback.version>
         <kafka.clients.version>3.7.0</kafka.clients.version>
-
+        <spring.kafka.version>3.2.0</spring.kafka.version>
+        <spring.starter.elasticsearch.version>3.3.0</spring.starter.elasticsearch.version>
+        <elasticsearch.version>7.17.21</elasticsearch.version>
+        <bucket4j.core.version>8.10.1</bucket4j.core.version>
+        <bucket4j.jcache.version>8.10.1</bucket4j.jcache.version>
 <!--        Internal modules version-->
         <common.lib.version>0.0.1-SNAPSHOT</common.lib.version>
     </properties>
 
     <dependencyManagement>
         <dependencies>
-<!--            Internal modules-->
-<!--            <dependency>-->
-<!--                <groupId>com.project.uit.trendify.common.lib</groupId>-->
-<!--                <artifactId>common-lib</artifactId>-->
-<!--                <version>${common.lib.version}</version>-->
-<!--            </dependency>-->
             <dependency>
                 <groupId>com.project.uit.trendify.common.lib</groupId>
                 <artifactId>common-lib</artifactId>
-                <version>0.0.1-SNAPSHOT</version>
+                <version>${common.lib.version}</version>
             </dependency>
-
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -128,9 +127,28 @@
             <dependency>
                 <groupId>org.springframework.kafka</groupId>
                 <artifactId>spring-kafka</artifactId>
-                <version>3.2.0</version>
+                <version>${spring.kafka.version}</version>
             </dependency>
-
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-data-elasticsearch</artifactId>
+                <version>${spring.starter.elasticsearch.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.elasticsearch.client</groupId>
+                <artifactId>elasticsearch-rest-high-level-client</artifactId>
+                <version>${elasticsearch.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.bucket4j</groupId>
+                <artifactId>bucket4j-core</artifactId>
+                <version>${bucket4j.core.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.bucket4j</groupId>
+                <artifactId>bucket4j-jcache</artifactId>
+                <version>${bucket4j.jcache.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -148,7 +166,6 @@
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
             <version>${logback.classic.version}</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.postgresql</groupId>

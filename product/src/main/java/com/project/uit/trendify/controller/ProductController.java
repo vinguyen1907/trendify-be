@@ -2,6 +2,8 @@ package com.project.uit.trendify.controller;
 
 import com.project.uit.trendify.common.lib.dto.ProductDTO;
 import com.project.uit.trendify.common.lib.request.GetProductByCodesRequest;
+import com.project.uit.trendify.common.lib.request.GetProductsByIdsRequest;
+import com.project.uit.trendify.common.lib.request.UpdateStockRequest;
 import com.project.uit.trendify.dto.PageDTO;
 import com.project.uit.trendify.common.lib.response.GetProductByCodesResponse;
 import com.project.uit.trendify.entity.ProductSpecificationEntity;
@@ -58,5 +60,26 @@ public class ProductController {
         var response = new GetProductByCodesResponse(products);
         LOGGER.info("Response to get products by codes request: " + response);
         return ResponseEntity.ok(response);
+    }
+
+    @PostMapping(path = "/ids")
+    public ResponseEntity<GetProductByCodesResponse> getProductsByIds(
+            @RequestBody GetProductsByIdsRequest request
+    ) {
+        LOGGER.info("Get products by ids: " + request.getIds());
+        var products = productService.getProductsByIds(request.getIds());
+        var response = new GetProductByCodesResponse(products);
+        LOGGER.info("Response to get products by codes request: " + response);
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping(path = "/update-stock")
+    public ResponseEntity<Boolean> updateStock(
+            @RequestBody UpdateStockRequest request
+    ) {
+        LOGGER.info("Receive POST /api/v1/products/update-stock: {}", request);
+        productService.updateStock(request);
+        LOGGER.info("Response to  POST /api/v1/products/update-stock: {}", true);
+        return ResponseEntity.ok(true);
     }
 }

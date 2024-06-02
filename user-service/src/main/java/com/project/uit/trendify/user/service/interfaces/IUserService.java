@@ -1,4 +1,4 @@
-package com.project.uit.trendify.service.interfaces;
+package com.project.uit.trendify.user.service.interfaces;
 
 import com.project.uit.trendify.common.lib.dto.ProductDTO;
 import com.project.uit.trendify.common.lib.dto.UserDTO;
@@ -10,5 +10,5 @@ public interface IUserService {
     UserDTO getUserById(Long id);
     UserDTO getUserByEmail(String email);
     UserDTO updateUser(Long userId, UpdateUserRequest request);
-    List<ProductDTO> getRecommendProducts(Long userId);
+    List<ProductDTO> getRecommendProducts(Long userId, Integer page, Integer size);
 }

@@ -1,4 +1,4 @@
-package com.project.uit.trendify.user.util;
+package com.project.uit.trendify.common.lib.util;
 
 import com.project.uit.trendify.common.lib.entity.User;
 import org.slf4j.Logger;

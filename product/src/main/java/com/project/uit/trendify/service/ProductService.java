@@ -2,6 +2,7 @@ package com.project.uit.trendify.service;
 
 import com.project.uit.trendify.common.lib.dto.ProductDTO;
 import com.project.uit.trendify.common.lib.dto.RestGetRecommendDTO;
+import com.project.uit.trendify.common.lib.request.UpdateStockRequest;
 import com.project.uit.trendify.dto.PageDTO;
 import com.project.uit.trendify.entity.ProductSpecificationEntity;
 import com.project.uit.trendify.repository.ProductRepository;
@@ -9,6 +10,7 @@ import com.project.uit.trendify.request.GetRecommendedProductsRequest;
 import com.project.uit.trendify.response.GetRelatedProductsResponse;
 import com.project.uit.trendify.service.interfaces.IProductService;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -73,7 +75,28 @@ public class ProductService implements IProductService {
     }
 
     @Override
+    public List<ProductDTO> getProductsByIds(List<Long> ids) {
+        return productRepository.findAllByIdIn(ids).stream().map(ProductDTO::new).toList();
+    }
+
+    @Override
     public List<ProductSpecificationEntity> getProductSpecifications(Long productId) {
         return null;
+    }
+
+    @Override
+    @Transactional
+    public void updateStock(UpdateStockRequest request) {
+        request.getItems().forEach(item -> {
+            productRepository.findById(item.getProductId())
+                    .ifPresent(product -> {
+                        if (product.getStockCount() < item.getQuantity()) {
+                            throw new IllegalArgumentException("Not enough stock for product: " + product.getId());
+                        }
+                        product.setStockCount(product.getStockCount() - item.getQuantity());
+                        product.setSoldCount(product.getSoldCount() + item.getQuantity());
+                        productRepository.save(product);
+                    });
+        });
     }
 }

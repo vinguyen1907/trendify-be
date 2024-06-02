@@ -4,12 +4,14 @@ import com.project.uit.trendify.common.lib.entity.Product;
 import com.project.uit.trendify.common.lib.entity.ProductImageEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class ProductDTO {
     private String id;
     private String code;

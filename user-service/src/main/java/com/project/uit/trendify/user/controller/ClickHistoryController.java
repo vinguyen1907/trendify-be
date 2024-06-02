@@ -3,7 +3,7 @@ package com.project.uit.trendify.user.controller;
 import com.project.uit.trendify.user.message.RecordClickHistoryMessage;
 import com.project.uit.trendify.user.producer.ClickHistoryProducer;
 import com.project.uit.trendify.user.request.RecordClickHistoryRequest;
-import com.project.uit.trendify.user.util.ExtractTokenUtil;
+import com.project.uit.trendify.common.lib.util.ExtractTokenUtil;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
