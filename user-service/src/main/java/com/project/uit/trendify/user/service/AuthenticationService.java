@@ -1,5 +1,6 @@
 package com.project.uit.trendify.user.service;
 
+import com.project.uit.trendify.common.lib.entity.UserBuilder;
 import com.project.uit.trendify.common.lib.service.JwtService;
 import com.project.uit.trendify.common.lib.enums.TokenType;
 import com.project.uit.trendify.common.lib.request.SignInRequest;
@@ -66,7 +67,7 @@ public class AuthenticationService implements IAuthenticationService {
             throw new DuplicateEmailException();
         }
 
-        var user = new User.Builder()
+        var user = UserBuilder.builder()
                 .email(request.getEmail())
                 .password(passwordUtil.encodePassword(request.getPassword()))
                 .name(request.getName())

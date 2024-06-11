@@ -1,5 +1,7 @@
 package com.project.uit.trendify.order.controller;
 
+import com.project.uit.trendify.common.lib.util.ExtractTokenUtil;
+import com.project.uit.trendify.order.dto.OrderDTO;
 import com.project.uit.trendify.order.dto.UpdateProductsStockDTO;
 import com.project.uit.trendify.order.dto.UpdateProductsStockItemDTO;
 import com.project.uit.trendify.order.entity.OrderEntity;
@@ -33,6 +35,7 @@ public class OrderController {
     private final IProductServiceClient productServiceClient;
     private final PlaceOrderProducer placeOrderProducer;
     private final Map<String, Bucket> rateLimitBuckets;
+    private final ExtractTokenUtil extractTokenUtil;
 
     @PostMapping("")
     public ResponseEntity<PlaceOrderResponse> createOrder(@RequestBody PlaceOrderRequest request) {
@@ -120,5 +123,14 @@ public class OrderController {
     ConsumptionProbe consumptionProbe() {
         Bucket bucket = rateLimitBuckets.get("order-service");
         return bucket.tryConsumeAndReturnRemaining(1);
+    }
+
+    @GetMapping("/user")
+    public ResponseEntity<List<OrderDTO>> getOrdersByUser(@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer size, @RequestParam(required = false) OrderStatus status) {
+        Long userId = extractTokenUtil.getUserIdFromToken();
+        LOGGER.info("GET /api/v1/order/user/{}", userId);
+        List<OrderDTO> orders = orderService.getOrdersByCustomerId(userId);
+        LOGGER.info("Response GET /api/v1/order/user/{}: {}", userId, orders);
+        return ResponseEntity.ok(orders);
     }
 }

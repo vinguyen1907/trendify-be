@@ -1,5 +1,6 @@
 package com.project.uit.trendify.order.service;
 
+import com.project.uit.trendify.order.dto.OrderDTO;
 import com.project.uit.trendify.order.entity.OrderEntity;
 import com.project.uit.trendify.order.entity.OrderItemEntity;
 import com.project.uit.trendify.order.repository.OrderItemRepository;
@@ -8,6 +9,7 @@ import com.project.uit.trendify.order.service.interfaces.IOrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -27,5 +29,31 @@ public class OrderService implements IOrderService {
     @Override
     public List<OrderItemEntity> getOrderItemsByOrderId(Long orderId) {
         return orderItemRepository.findAllByOrderId(orderId);
+    }
+
+    @Override
+    public List<OrderDTO> getOrdersByCustomerId(Long customerId) {
+        List<OrderEntity> orders = orderRepository.findAllByCustomerId(customerId);
+        List<OrderDTO> orderDTOs = new ArrayList<>();
+        orders.forEach(order -> {
+            var orderDTO = new OrderDTO(
+                    order.getId(),
+                    order.getOrderNumber(),
+                    order.getCustomerId(),
+                    order.getSubTotal(),
+                    order.getShippingFee(),
+                    order.getPromotionDiscount(),
+                    order.getTotalPrice(),
+                    order.getIsCompleted(),
+                    order.getPaymentMethod(),
+                    order.getIsPaid(),
+                    order.getCurrentOrderStatus(),
+                    orderItemRepository.findAllByOrderId(order.getId()),
+                    order.getCreatedAt(),
+                    order.getUpdatedAt()
+            );
+            orderDTOs.add(orderDTO);
+        });
+        return orderDTOs;
     }
 }

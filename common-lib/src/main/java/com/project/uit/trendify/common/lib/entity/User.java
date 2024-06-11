@@ -22,7 +22,6 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -111,73 +110,73 @@ public class User implements UserDetails {
     }
 
 
-    public static class Builder {
-        private Long id;
-        private String email;
-        private String password;
-        private String name;
-        private String imageUrl;
-        private Gender gender;
-        private Integer age;
-        private String fcmToken;
-        private Role role;
-
-        public Builder id(Long id) {
-            this.id = id;
-            return this;
-        }
-
-        public Builder email(String email) {
-            this.email = email;
-            return this;
-        }
-
-        public Builder password(String password) {
-            this.password = password;
-            return this;
-        }
-
-        public Builder name(String name) {
-            this.name = name;
-            return this;
-        }
-
-        public Builder imageUrl(String imageUrl) {
-            this.imageUrl = imageUrl;
-            return this;
-        }
-
-        public Builder gender(Gender gender) {
-            this.gender = gender;
-            return this;
-        }
-
-        public Builder age(Integer age) {
-            this.age = age;
-            return this;
-        }
-
-        public Builder fcmToken(String fcmToken) {
-            this.fcmToken = fcmToken;
-            return this;
-        }
-
-        public Builder role(Role role) {
-            this.role = role;
-            return this;
-        }
-
-        public User build() {
-            User user = new User();
-            user.id = this.id;
-            user.email = this.email;
-            user.password = this.password;
-            user.name = this.name;
-            user.imageUrl = this.imageUrl;
-            user.gender = this.gender;
-            user.age = this.age;
-            user.role = this.role;
-            return user;
-        }
-    }
+//    public static class Builder {
+//        private Long id;
+//        private String email;
+//        private String password;
+//        private String name;
+//        private String imageUrl;
+//        private Gender gender;
+//        private Integer age;
+//        private String fcmToken;
+//        private Role role;
+//
+//        public Builder id(Long id) {
+//            this.id = id;
+//            return this;
+//        }
+//
+//        public Builder email(String email) {
+//            this.email = email;
+//            return this;
+//        }
+//
+//        public Builder password(String password) {
+//            this.password = password;
+//            return this;
+//        }
+//
+//        public Builder name(String name) {
+//            this.name = name;
+//            return this;
+//        }
+//
+//        public Builder imageUrl(String imageUrl) {
+//            this.imageUrl = imageUrl;
+//            return this;
+//        }
+//
+//        public Builder gender(Gender gender) {
+//            this.gender = gender;
+//            return this;
+//        }
+//
+//        public Builder age(Integer age) {
+//            this.age = age;
+//            return this;
+//        }
+//
+//        public Builder fcmToken(String fcmToken) {
+//            this.fcmToken = fcmToken;
+//            return this;
+//        }
+//
+//        public Builder role(Role role) {
+//            this.role = role;
+//            return this;
+//        }
+//
+//        public User build() {
+//            User user = new User();
+//            user.id = this.id;
+//            user.email = this.email;
+//            user.password = this.password;
+//            user.name = this.name;
+//            user.imageUrl = this.imageUrl;
+//            user.gender = this.gender;
+//            user.age = this.age;
+//            user.role = this.role;
+//            return user;
+//        }
+//    }
 }

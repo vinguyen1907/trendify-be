@@ -24,6 +24,7 @@
         <module>api-gateway</module>
         <module>payment-service</module>
         <module>order-service</module>
+        <module>shipping-service</module>
     </modules>
 
     <properties>
@@ -47,6 +48,7 @@
         <bucket4j.jcache.version>8.10.1</bucket4j.jcache.version>
 <!--        Internal modules version-->
         <common.lib.version>0.0.1-SNAPSHOT</common.lib.version>
+        <order.service.version>0.0.1-SNAPSHOT</order.service.version>
     </properties>
 
     <dependencyManagement>
@@ -55,6 +57,11 @@
                 <groupId>com.project.uit.trendify.common.lib</groupId>
                 <artifactId>common-lib</artifactId>
                 <version>${common.lib.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.project.uit.trendify.order</groupId>
+                <artifactId>order-service</artifactId>
+                <version>${order.service.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework.boot</groupId>
@@ -102,13 +109,6 @@
                 <artifactId>spring-messaging</artifactId>
                 <version>${spring.messaging.version}</version>
             </dependency>
-<!--            <dependency>-->
-<!--                <groupId>io.netty</groupId>-->
-<!--                <artifactId>netty-resolver-dns-native-macos</artifactId>-->
-<!--                <version>${netty.native.macos.version}</version>-->
-<!--                <classifier>osx-aarch_64</classifier>-->
-<!--                <scope>runtime</scope>-->
-<!--            </dependency>-->
             <dependency>
                 <groupId>io.netty</groupId>
                 <artifactId>netty-all</artifactId>
