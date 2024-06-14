@@ -126,11 +126,43 @@ public class OrderController {
     }
 
     @GetMapping("/user")
-    public ResponseEntity<List<OrderDTO>> getOrdersByUser(@RequestParam(required = false) Integer page, @RequestParam(required = false) Integer size, @RequestParam(required = false) OrderStatus status) {
+    public ResponseEntity<List<OrderDTO>> getOrdersByUser(
+            @RequestParam(required = false) Integer page,
+            @RequestParam(required = false) Integer size,
+            @RequestParam(required = false) OrderStatus status) {
         Long userId = extractTokenUtil.getUserIdFromToken();
         LOGGER.info("GET /api/v1/order/user/{}", userId);
+
         List<OrderDTO> orders = orderService.getOrdersByCustomerId(userId);
         LOGGER.info("Response GET /api/v1/order/user/{}: {}", userId, orders);
+        return ResponseEntity.ok(orders);
+    }
+
+    @GetMapping("/user/completed")
+    public ResponseEntity<List<OrderDTO>> getCompletedOrdersByUser(
+            @RequestParam(required = false) Integer page,
+            @RequestParam(required = false) Integer size) {
+        Long userId = extractTokenUtil.getUserIdFromToken();
+        LOGGER.info("GET /api/v1/order/user/completed {}", userId);
+
+        List<OrderStatus> statuses = List.of(OrderStatus.DELIVERED, OrderStatus.CANCELLED, OrderStatus.RETURNED, OrderStatus.REFUNDED);
+        List<OrderDTO> orders = orderService.getOrdersByCustomerIdAndStatuses(userId, statuses);
+
+        LOGGER.info("Response GET /api/v1/order/user/completed {}: {}", userId, orders);
+        return ResponseEntity.ok(orders);
+    }
+
+    @GetMapping("/user/ongoing")
+    public ResponseEntity<List<OrderDTO>> getOngoingOrdersByUser(
+            @RequestParam(required = false) Integer page,
+            @RequestParam(required = false) Integer size) {
+        Long userId = extractTokenUtil.getUserIdFromToken();
+        LOGGER.info("GET /api/v1/order/user/ongoing user_id:" + userId);
+
+        List<OrderStatus> statuses = List.of(OrderStatus.PENDING, OrderStatus.PROCESSING, OrderStatus.SHIPPED, OrderStatus.ON_HOLD, OrderStatus.OUT_FOR_DELIVERY, OrderStatus.FAILED_DELIVERY);
+        List<OrderDTO> orders = orderService.getOrdersByCustomerIdAndStatuses(userId, statuses);
+
+        LOGGER.info("Response GET /api/v1/order/user/ongoing {}: {}", userId, orders);
         return ResponseEntity.ok(orders);
     }
 }

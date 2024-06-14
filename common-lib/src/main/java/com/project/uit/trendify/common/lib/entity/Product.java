@@ -23,6 +23,7 @@ public class Product {
     @OneToMany(mappedBy = "product")
     private List<ProductImageEntity> images;
     private String brand;
+    private Long categoryId;
     private Double price;
     private String outerMaterial;
     private String innerMaterial;
