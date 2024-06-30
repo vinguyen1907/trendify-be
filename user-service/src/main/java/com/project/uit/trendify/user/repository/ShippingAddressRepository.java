@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface ShippingAddressRepository extends JpaRepository<ShippingAddressEntity, Long> {
-    List<ShippingAddressEntity> findAllByUserId(Long userId);
+    List<ShippingAddressEntity> findAllByUserIdOrderByUpdatedAtDesc(Long userId);
 }

@@ -60,7 +60,7 @@ public class OrderService implements IOrderService {
 
     @Override
     public List<OrderDTO> getOrdersByCustomerIdAndStatuses(Long customerId, List<OrderStatus> statuses) {
-        List<OrderEntity> orders = orderRepository.findAllByCustomerIdAndCurrentOrderStatusIn(customerId, statuses);
+        List<OrderEntity> orders = orderRepository.findAllByCustomerIdAndCurrentOrderStatusInOrderByUpdatedAtDesc(customerId, statuses);
         List<OrderDTO> orderDTOs = new ArrayList<>();
         orders.forEach(order -> {
             var orderDTO = new OrderDTO(

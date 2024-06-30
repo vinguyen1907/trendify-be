@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.*;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -61,6 +62,13 @@ public class UserService implements IUserService {
         }
 
         return userRepository.save(user).toDTO();
+    }
+
+    @Override
+    public void updateUserAvatar(Long userId, String avatarUrl) {
+        var user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("User not found"));
+        user.setImageUrl(avatarUrl);
+        userRepository.save(user);
     }
 
     @Override

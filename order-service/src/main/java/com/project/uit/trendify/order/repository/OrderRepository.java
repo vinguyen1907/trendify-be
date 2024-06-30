@@ -10,5 +10,5 @@ import java.util.List;
 @Repository
 public interface OrderRepository extends JpaRepository<OrderEntity, Long> {
     List<OrderEntity> findAllByCustomerId(Long customerId);
-    List<OrderEntity> findAllByCustomerIdAndCurrentOrderStatusIn(Long customerId, List<OrderStatus> statuses);
+    List<OrderEntity> findAllByCustomerIdAndCurrentOrderStatusInOrderByUpdatedAtDesc(Long customerId, List<OrderStatus> statuses);
 }

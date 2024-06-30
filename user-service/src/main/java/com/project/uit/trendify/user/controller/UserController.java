@@ -4,6 +4,7 @@ import com.project.uit.trendify.common.lib.dto.ProductDTO;
 import com.project.uit.trendify.common.lib.dto.UserDTO;
 import com.project.uit.trendify.common.lib.request.UpdateUserRequest;
 import com.project.uit.trendify.common.lib.entity.User;
+import com.project.uit.trendify.user.service.interfaces.ICloudinaryService;
 import com.project.uit.trendify.user.service.interfaces.IUserService;
 import io.github.bucket4j.Bucket;
 import io.github.bucket4j.ConsumptionProbe;
@@ -16,6 +17,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
@@ -24,25 +26,30 @@ import java.util.Map;
 @RequestMapping("/api/v1/users")
 @RequiredArgsConstructor
 public class UserController {
-    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
     private final IUserService userService;
     private final Map<String, Bucket> rateLimitBuckets;
+    private final ICloudinaryService cloudinaryService;
 
     @GetMapping("/user")
     public ResponseEntity<UserDTO> getUserById() {
+        LOGGER.info("/GET /api/v1/users/user");
+
         ConsumptionProbe probe = consumptionProbe();
         if (probe.isConsumed()) {
             try {
                 Long userId = getUserIdFromToken();
-                return ResponseEntity.ok(userService.getUserById(userId));
+                var response = userService.getUserById(userId);
+                LOGGER.info("Get User by ID success - Response: {}", response);
+                return ResponseEntity.ok(response);
             } catch (Exception e) {
-                logger.error("Get User by ID ERROR: " + e.getMessage());
+                LOGGER.error("Get User by ID ERROR: " + e.getMessage());
                 return ResponseEntity.notFound().build();
             } finally {
-                logger.info("Get User by ID request - remaining tokens: " + probe.getRemainingTokens());
+                LOGGER.info("Get User by ID request - remaining tokens: " + probe.getRemainingTokens());
             }
         } else {
-            logger.warn("Too many requests to user-service");
+            LOGGER.warn("Too many requests to user-service");
             return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).build();
         }
 
@@ -56,21 +63,46 @@ public class UserController {
         if (probe.isConsumed()) {
             return ResponseEntity.ok(userService.getUserByEmail(email));
         } else {
-            logger.warn("Too many requests to user-service");
+            LOGGER.warn("Too many requests to user-service");
             return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).build();
         }
     }
 
-    @PatchMapping("/{userId}")
+    @PatchMapping("/user")
     public ResponseEntity<UserDTO> updateUser(
-            @PathVariable Long userId,
             @RequestBody UpdateUserRequest request
     ) {
+        LOGGER.info("/PATCH /api/v1/users/user");
         ConsumptionProbe probe = consumptionProbe();
         if (probe.isConsumed()) {
-            return ResponseEntity.ok(userService.updateUser(userId, request));
+            Long userId = getUserIdFromToken();
+            var response = userService.updateUser(userId, request);
+            LOGGER.info("Update user success - Response: {}", response);
+            return ResponseEntity.ok(response);
         } else {
-            logger.warn("Too many requests to user-service");
+            LOGGER.warn("Too many requests to user-service");
+            return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).build();
+        }
+    }
+
+    @PutMapping("/user/avatar")
+    public ResponseEntity<Boolean> updateUserAvatar(
+            @RequestParam MultipartFile file
+    ) {
+        LOGGER.info("/PUT /api/v1/users/user/avatar");
+        ConsumptionProbe probe = consumptionProbe();
+        if (probe.isConsumed()) {
+            Long userId = getUserIdFromToken();
+            var uploadedResult = cloudinaryService.uploadUserAvatar(userId, file);
+            LOGGER.info("Upload avatar result: " + uploadedResult);
+            if (uploadedResult == null) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            }
+            userService.updateUserAvatar(userId, uploadedResult.get("url").toString());
+            LOGGER.info("Update avatar success");
+            return ResponseEntity.ok().build();
+        } else {
+            LOGGER.warn("Too many requests to user-service");
             return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).build();
         }
     }
@@ -82,13 +114,13 @@ public class UserController {
     ) {
         ConsumptionProbe probe = consumptionProbe();
         if (probe.isConsumed()) {
-            logger.info("Get recommend products request - page {} - size {}", page, size);
+            LOGGER.info("Get recommend products request - page {} - size {}", page, size);
             Long userId = getUserIdFromToken();
             List<ProductDTO> products = userService.getRecommendProducts(userId, page, size);
-            logger.info("Response to recommend products request" + products);
+            LOGGER.info("Response to recommend products request" + products);
             return ResponseEntity.ok(products);
         } else {
-            logger.warn("Too many requests to user-service");
+            LOGGER.warn("Too many requests to user-service");
             return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).build();
         }
     }
@@ -98,7 +130,7 @@ public class UserController {
         if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
             User userDetails = (User) authentication.getPrincipal();
             Long userId = userDetails.getId();
-            logger.info("Get User by ID: " + userId);
+            LOGGER.info("Get User by ID: " + userId);
             return userId;
         }
         throw new UsernameNotFoundException("User not found");

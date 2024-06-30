@@ -46,6 +46,7 @@
         <elasticsearch.version>7.17.21</elasticsearch.version>
         <bucket4j.core.version>8.10.1</bucket4j.core.version>
         <bucket4j.jcache.version>8.10.1</bucket4j.jcache.version>
+        <cloudinary.version>1.38.0</cloudinary.version>
 <!--        Internal modules version-->
         <common.lib.version>0.0.1-SNAPSHOT</common.lib.version>
         <order.service.version>0.0.1-SNAPSHOT</order.service.version>
@@ -148,6 +149,11 @@
                 <groupId>com.bucket4j</groupId>
                 <artifactId>bucket4j-jcache</artifactId>
                 <version>${bucket4j.jcache.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.cloudinary</groupId>
+                <artifactId>cloudinary-http45</artifactId>
+                <version>${cloudinary.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

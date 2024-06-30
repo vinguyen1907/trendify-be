@@ -7,4 +7,6 @@ import java.util.List;
 public interface IShippingAddressService {
     List<ShippingAddressEntity> getShippingAddresses(Long userId);
     ShippingAddressEntity createShippingAddress(ShippingAddressEntity shippingAddressEntity);
+
+    void updateShippingAddress(ShippingAddressEntity shippingAddressEntity);
 }

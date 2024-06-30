@@ -15,11 +15,25 @@ public class ShippingAddressService implements IShippingAddressService {
 
     @Override
     public List<ShippingAddressEntity> getShippingAddresses(Long userId) {
-        return shippingAddressRepository.findAllByUserId(userId);
+        return shippingAddressRepository.findAllByUserIdOrderByUpdatedAtDesc(userId);
     }
 
     @Override
     public ShippingAddressEntity createShippingAddress(ShippingAddressEntity shippingAddressEntity) {
         return shippingAddressRepository.save(shippingAddressEntity);
+    }
+
+    @Override
+    public void updateShippingAddress(ShippingAddressEntity shippingAddressEntity) {
+        ShippingAddressEntity shippingAddress = shippingAddressRepository.findById(shippingAddressEntity.getId())
+                .orElseThrow(() -> new RuntimeException("Shipping address not found"));
+        shippingAddress.setRecipientName(shippingAddressEntity.getRecipientName());
+        shippingAddress.setCountry(shippingAddressEntity.getCountry());
+        shippingAddress.setCity(shippingAddressEntity.getCity());
+        shippingAddress.setState(shippingAddressEntity.getState());
+        shippingAddress.setStreet(shippingAddressEntity.getStreet());
+        shippingAddress.setZipCode(shippingAddressEntity.getZipCode());
+        shippingAddress.setCountryCallingCode(shippingAddressEntity.getCountryCallingCode());
+        shippingAddressRepository.save(shippingAddress);
     }
 }

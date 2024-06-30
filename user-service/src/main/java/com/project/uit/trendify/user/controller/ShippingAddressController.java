@@ -39,4 +39,16 @@ public class ShippingAddressController {
         LOGGER.info("Response create shipping address request: {}", response);
         return ResponseEntity.ok(response);
     }
+
+    @PutMapping("")
+    public ResponseEntity<?> updateShippingAddresses(
+            @RequestBody ShippingAddressEntity shippingAddressEntity
+    ) {
+        LOGGER.info("Receive Update shipping address request: {}", shippingAddressEntity);
+        Long userId = extractTokenUtil.getUserIdFromToken();
+        shippingAddressEntity.setUserId(userId);
+        shippingAddressService.updateShippingAddress(shippingAddressEntity);
+        LOGGER.info("Response /PUT /api/v1/shipping-address: Success");
+        return ResponseEntity.ok().build();
+    }
 }

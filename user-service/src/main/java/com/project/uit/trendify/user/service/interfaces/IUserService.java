@@ -10,5 +10,6 @@ public interface IUserService {
     UserDTO getUserById(Long id);
     UserDTO getUserByEmail(String email);
     UserDTO updateUser(Long userId, UpdateUserRequest request);
+    void updateUserAvatar(Long userId, String avatarUrl);
     List<ProductDTO> getRecommendProducts(Long userId, Integer page, Integer size);
 }
